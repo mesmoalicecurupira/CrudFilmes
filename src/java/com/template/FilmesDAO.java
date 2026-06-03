@@ -78,7 +78,6 @@ public class FilmesDAO {
             }
         }
 
-        //busca os registros da tabela e transforma em uma lista de Objetos
         public ArrayList<FilmesDTO> lerFilmes()
         {
             String sqlLer = "Select * from filmes";

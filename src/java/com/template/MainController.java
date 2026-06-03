@@ -76,21 +76,17 @@ public class MainController {
     @FXML
     private void btnAtualizarAction(ActionEvent event)
     {
-        // 1. Criamos o objeto que vai carregar os novos dados
         FilmesDTO Objfilmesdto = new FilmesDTO();
 
-        // 2. Preenchemos o objeto com o que o usuário digitou nas caixas de texto
         Objfilmesdto.setId(Integer.valueOf(txtId.getText()));
         Objfilmesdto.setNome(txtNome.getText());
         Objfilmesdto.setClassificacao(txtClassificacao.getText());
         Objfilmesdto.setAtores(txtAtores.getText());
         Objfilmesdto.setCategoria(txtCategoria.getText());
 
-        // 3. Chamamos o DAO para atualizar no banco de dados (Isso estava faltando!)
         FilmesDAO filmesDAO = new FilmesDAO();
         filmesDAO.atualizarFilmes(Objfilmesdto);
 
-        // 4. Atualiza a tabela na tela para mostrar o filme alterado
         carregarFilmes();
     }
     @FXML

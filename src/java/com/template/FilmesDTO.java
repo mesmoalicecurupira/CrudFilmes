@@ -8,7 +8,6 @@ public class FilmesDTO {
         private String classificacao;
         private String atores;
 
-        //metodos getters para ler e setters para alterar
         public int getId()
         {
             return id;
