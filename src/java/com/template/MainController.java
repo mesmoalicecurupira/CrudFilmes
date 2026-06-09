@@ -23,10 +23,11 @@ public class MainController {
     @FXML private TextField txtCategoria;
     @FXML private TextField txtAtores;
     @FXML private TableView<FilmesDTO> tblFilmes;
-    @FXML private TableColumn<FilmesDTO, Integer> colId;
+    @FXML private TableColumn<FilmesDTO, Integer> colId;//essas tabelas so aceitam obj FilmesDTO
     @FXML private TableColumn<FilmesDTO, String> colNome;
-    @FXML private TableColumn<FilmesDTO, Integer> colClassificacao;
+    @FXML private TableColumn<FilmesDTO, String> colClassificacao;
     @FXML private TableColumn<FilmesDTO, String> colAtores;
+    @FXML private TableColumn<FilmesDTO, String> colCategoria;
 
     @FXML
     private void btnSalvarAction (ActionEvent event){
@@ -35,14 +36,14 @@ public class MainController {
         String atores = txtAtores.getText();
         String categoria = txtCategoria.getText();
 
-        FilmesDTO Objfilmesdto = new FilmesDTO();
-        Objfilmesdto.setNome(nome);
-        Objfilmesdto.setClassificacao(classificacao);
-        Objfilmesdto.setCategoria(categoria);
-        Objfilmesdto.setAtores(atores);
+        FilmesDTO ObjfilmesDTO = new FilmesDTO();
+        ObjfilmesDTO.setNome(nome);
+        ObjfilmesDTO.setClassificacao(classificacao);
+        ObjfilmesDTO.setCategoria(categoria);
+        ObjfilmesDTO.setAtores(atores);
 
-        FilmesDAO objfilmesdao = new FilmesDAO();
-        objfilmesdao.cadastrarFilmes(Objfilmesdto);
+        FilmesDAO objfilmesDAO = new FilmesDAO();
+        objfilmesDAO.cadastrarFilmes(ObjfilmesDTO);
 
         carregarFilmes();
     }
@@ -50,15 +51,19 @@ public class MainController {
     @FXML
     private void initialize()
     {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));//esse codigo se comunica com a view(.fxml)
+        //PropertyValueFactory associa a coluna da tabela ao atributo específico do FilmesDTO.
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colAtores.setCellValueFactory(new PropertyValueFactory<>("atores"));
-        colClassificacao.setCellValueFactory((new PropertyValueFactory<>("classificacao")));
+        colClassificacao.setCellValueFactory(new PropertyValueFactory<>("classificacao"));
+        colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
+
         carregarFilmes();
     }
 
     @FXML
     private void carregarFilmes() {
+        // Busca a lista de filmes do banco de dados
         FilmesDAO objFilmesDAO = new FilmesDAO();
         ArrayList<FilmesDTO> listaDeFilmes = objFilmesDAO.lerFilmes();
         tblFilmes.setItems(FXCollections.observableArrayList(listaDeFilmes));
@@ -76,27 +81,27 @@ public class MainController {
     @FXML
     private void btnAtualizarAction(ActionEvent event)
     {
-        FilmesDTO Objfilmesdto = new FilmesDTO();
+        FilmesDTO ObjfilmesDTO = new FilmesDTO();
 
-        Objfilmesdto.setId(Integer.valueOf(txtId.getText()));
-        Objfilmesdto.setNome(txtNome.getText());
-        Objfilmesdto.setClassificacao(txtClassificacao.getText());
-        Objfilmesdto.setAtores(txtAtores.getText());
-        Objfilmesdto.setCategoria(txtCategoria.getText());
+        ObjfilmesDTO.setId(Integer.valueOf(txtId.getText()));
+        ObjfilmesDTO.setNome(txtNome.getText());
+        ObjfilmesDTO.setClassificacao(txtClassificacao.getText());
+        ObjfilmesDTO.setAtores(txtAtores.getText());
+        ObjfilmesDTO.setCategoria(txtCategoria.getText());
 
         FilmesDAO filmesDAO = new FilmesDAO();
-        filmesDAO.atualizarFilmes(Objfilmesdto);
+        filmesDAO.atualizarFilmes(ObjfilmesDTO);
 
         carregarFilmes();
     }
     @FXML
     private void btnExcluirAction(ActionEvent event) {
-        FilmesDTO Objfilmesdto = new FilmesDTO();
+        FilmesDTO ObjfilmesDTO = new FilmesDTO();
         Integer id = Integer.valueOf(txtId.getText());
-        Objfilmesdto.setId(id);
+        ObjfilmesDTO.setId(id);
 
         FilmesDAO objFilmesDAO = new FilmesDAO();
-        objFilmesDAO.deletarFilmes(Objfilmesdto);
+        objFilmesDAO.deletarFilmes(ObjfilmesDTO);
 
         carregarFilmes();
     }

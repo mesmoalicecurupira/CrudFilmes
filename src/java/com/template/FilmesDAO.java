@@ -16,7 +16,7 @@ public class FilmesDAO {
 
             try(Connection conexao = new Conexao().conectaBD(); PreparedStatement smt = conexao.prepareStatement(sql))
             {
-                smt.setString(1,filmes.getNome());
+                smt.setString(1,filmes.getNome());//substitui as ? pelos dados reais do dto
                 smt.setString(2,filmes.getCategoria());
                 smt.setString(3,filmes.getClassificacao());
                 smt.setString(4,filmes.getAtores());
@@ -36,10 +36,10 @@ public class FilmesDAO {
 
             try(Connection conexao = new Conexao().conectaBD(); PreparedStatement smt = conexao.prepareStatement(sqlDelete))
             {
-                smt.setInt(1, filmes.getId());
+                smt.setInt(1, filmes.getId());//define qual id sera excluido
 
                 int removidos = smt.executeUpdate();
-                if (removidos > 0)
+                if (removidos == 0)
                 {
                     logger.log(Level.SEVERE,"nada pra ser removidos");
                 }
