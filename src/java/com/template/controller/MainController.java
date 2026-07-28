@@ -1,5 +1,6 @@
-package com.template;
-
+package com.template.controller;
+import com.template.model.dao.FilmesDAO;
+import com.template.model.dto.FilmesDTO;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -103,7 +104,6 @@ public class MainController {
         FilmesDAO objFilmesDAO = new FilmesDAO();
         objFilmesDAO.deletarFilmes(ObjfilmesDTO);
 
-        // Atualiza a tela primeiro
         carregarFilmes();
         btnLimparAction(event);
 

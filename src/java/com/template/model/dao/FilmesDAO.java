@@ -1,10 +1,14 @@
-package com.template;
+package com.template.model.dao;
+
+import com.template.model.Conexao;
+import com.template.model.dto.FilmesDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.template.util.DialogUtil.showError;
 
 public class FilmesDAO {
 
@@ -28,6 +32,7 @@ public class FilmesDAO {
             catch(SQLException e)
             {
                 logger.log(Level.SEVERE,"erro", e);
+                showError( "Error ao cadastrar");
             }
         }
         public void deletarFilmes(FilmesDTO filmes)
@@ -48,6 +53,8 @@ public class FilmesDAO {
             catch(SQLException e )
             {
                 logger.log(Level.SEVERE,"erro", e);
+                showError( "Error ao deletar");
+
 
             }
         }
@@ -74,6 +81,8 @@ public class FilmesDAO {
             catch (SQLException e)
             {
                 logger.log(Level.SEVERE,"erro", e);
+                showError( "Error ao atualizar");
+
 
             }
         }
@@ -102,6 +111,8 @@ public class FilmesDAO {
                 }
             } catch(SQLException e) {
                 logger.log(Level.SEVERE,"erro ao ler filmes", e);
+                showError( "Error ao ler");
+
             }
 
             return listaDeFilmes;
