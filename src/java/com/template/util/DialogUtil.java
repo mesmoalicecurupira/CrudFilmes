@@ -19,7 +19,7 @@ public class DialogUtil {
         alert.setContentText(mensagem);
         return alert.showAndWait().get() == ButtonType.OK;
     }
-    public static void showAlert (String mensagem)
+    public static void showWarning(String mensagem)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Alerta");
@@ -34,4 +34,5 @@ public class DialogUtil {
         alert.setContentText(mensagem);
         alert.showAndWait();
     }
+
 }
