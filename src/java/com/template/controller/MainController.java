@@ -1,6 +1,7 @@
 package com.template.controller;
-import com.template.model.dao.FilmesDAO;
+
 import com.template.model.dto.FilmesDTO;
+import com.template.service.FilmesService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,8 +34,12 @@ public class MainController {
     @FXML private TableColumn<FilmesDTO, String> colAtores;
     @FXML private TableColumn<FilmesDTO, String> colCategoria;
 
+    // Instanciamos o Service que cuidará da parte pesada do trabalho
+    private final FilmesService filmesService = new FilmesService();
+
     @FXML
     private void initialize() {
+        // Configuração das colunas da tabela
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colAtores.setCellValueFactory(new PropertyValueFactory<>("atores"));
@@ -56,60 +61,59 @@ public class MainController {
         String nome = txtNome.getText();
         String classificacao = txtClassificacao.getText();
         String atores = txtAtores.getText();
-        String categoria = (cmbCategoria != null) ? cmbCategoria.getValue() : "";
+        String categoria = (cmbCategoria != null && cmbCategoria.getValue() != null) ? cmbCategoria.getValue() : "";
 
-        FilmesDTO ObjfilmesDTO = new FilmesDTO();
-        ObjfilmesDTO.setNome(nome);
-        ObjfilmesDTO.setClassificacao(classificacao);
-        ObjfilmesDTO.setCategoria(categoria);
-        ObjfilmesDTO.setAtores(atores);
+        // O Controller agora apenas pede para o Service salvar
+        boolean sucesso = filmesService.salvarFilme(nome, classificacao, categoria, atores);
 
-        FilmesDAO objfilmesDAO = new FilmesDAO();
-        objfilmesDAO.cadastrarFilmes(ObjfilmesDTO);
-
-        carregarFilmes();
-        btnLimparAction(event);
-
-        if (lblMensagem != null) {
-            lblMensagem.setText("O Filme '" + nome + "' foi cadastrado");
+        if (sucesso) {
+            carregarFilmes();
+            btnLimparAction(event);
+            if (lblMensagem != null) {
+                lblMensagem.setText("O Filme '" + nome + "' foi cadastrado");
+            }
         }
     }
 
     @FXML
     private void btnAtualizarAction(ActionEvent event) {
-        FilmesDTO ObjfilmesDTO = new FilmesDTO();
-        ObjfilmesDTO.setId(Integer.valueOf(txtId.getText()));
-        ObjfilmesDTO.setNome(txtNome.getText());
-        ObjfilmesDTO.setClassificacao(txtClassificacao.getText());
-        ObjfilmesDTO.setAtores(txtAtores.getText());
-        ObjfilmesDTO.setCategoria((cmbCategoria != null) ? cmbCategoria.getValue() : "");
+        try {
+            int id = Integer.parseInt(txtId.getText());
+            String nome = txtNome.getText();
+            String classificacao = txtClassificacao.getText();
+            String atores = txtAtores.getText();
+            String categoria = (cmbCategoria != null && cmbCategoria.getValue() != null) ? cmbCategoria.getValue() : "";
 
-        FilmesDAO filmesDAO = new FilmesDAO();
-        filmesDAO.atualizarFilmes(ObjfilmesDTO);
+            boolean sucesso = filmesService.atualizarFilme(id, nome, classificacao, categoria, atores);
 
-        // Atualiza a tela primeiro
-        carregarFilmes();
-        btnLimparAction(event);
-
-        if (lblMensagem != null) {
-            lblMensagem.setText("Filme atualizado");
+            if (sucesso) {
+                carregarFilmes();
+                btnLimparAction(event);
+                if (lblMensagem != null) {
+                    lblMensagem.setText("Filme atualizado");
+                }
+            }
+        } catch (NumberFormatException e) {
+            // Caso o ID não seja um número válido
+            if (lblMensagem != null) lblMensagem.setText("Erro: ID inválido para atualização.");
         }
     }
 
     @FXML
     private void btnExcluirAction(ActionEvent event) {
-        FilmesDTO ObjfilmesDTO = new FilmesDTO();
-        ObjfilmesDTO.setId(Integer.valueOf(txtId.getText()));
+        try {
+            int id = Integer.parseInt(txtId.getText());
 
-        FilmesDAO objFilmesDAO = new FilmesDAO();
-        objFilmesDAO.deletarFilmes(ObjfilmesDTO);
+            filmesService.excluirFilme(id);
 
-        carregarFilmes();
-        btnLimparAction(event);
+            carregarFilmes();
+            btnLimparAction(event);
 
-        if (lblMensagem != null) {
-            lblMensagem.setText("Filme excluído com sucesso");
-
+            if (lblMensagem != null) {
+                lblMensagem.setText("Filme excluído com sucesso");
+            }
+        } catch (NumberFormatException e) {
+            if (lblMensagem != null) lblMensagem.setText("Erro: Selecione um filme para excluir.");
         }
     }
 
@@ -147,8 +151,8 @@ public class MainController {
 
     @FXML
     private void carregarFilmes() {
-        FilmesDAO objFilmesDAO = new FilmesDAO();
-        ArrayList<FilmesDTO> listaDeFilmes = objFilmesDAO.lerFilmes();
+        // Pede a lista para o Service e atualiza a tabela
+        ArrayList<FilmesDTO> listaDeFilmes = filmesService.listarFilmes();
         tblFilmes.setItems(FXCollections.observableArrayList(listaDeFilmes));
     }
 }
