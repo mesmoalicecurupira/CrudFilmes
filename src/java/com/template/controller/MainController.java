@@ -63,8 +63,8 @@ public class MainController {
         String atores = txtAtores.getText();
         String categoria = (cmbCategoria != null && cmbCategoria.getValue() != null) ? cmbCategoria.getValue() : "";
 
-        // O Controller agora apenas pede para o Service salvar
-        boolean sucesso = filmesService.salvarFilme(nome, classificacao, categoria, atores);
+        // Ordem atualizada: (nome, categoria, classificacao, atores)
+        boolean sucesso = filmesService.salvarFilme(nome, categoria, classificacao, atores);
 
         if (sucesso) {
             carregarFilmes();
@@ -84,7 +84,8 @@ public class MainController {
             String atores = txtAtores.getText();
             String categoria = (cmbCategoria != null && cmbCategoria.getValue() != null) ? cmbCategoria.getValue() : "";
 
-            boolean sucesso = filmesService.atualizarFilme(id, nome, classificacao, categoria, atores);
+            // Ordem atualizada: (id, nome, categoria, classificacao, atores)
+            boolean sucesso = filmesService.atualizarFilme(id, nome, categoria, classificacao, atores);
 
             if (sucesso) {
                 carregarFilmes();
@@ -94,7 +95,6 @@ public class MainController {
                 }
             }
         } catch (NumberFormatException e) {
-            // Caso o ID não seja um número válido
             if (lblMensagem != null) lblMensagem.setText("Erro: ID inválido para atualização.");
         }
     }
