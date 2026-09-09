@@ -13,13 +13,14 @@ public class ClassificacaoValidador implements Validador<String> {
     }
 
     @Override
-    public boolean validar(String valorAtual) {
-        return this.classificacao != null && pattern.matcher(this.classificacao).matches();
+    public boolean validar(String valor) {
+        String texto = (valor != null) ? valor : this.classificacao;
+        return texto != null && pattern.matcher(texto).matches();
     }
 
     @Override
     public String getMensagemErro() {
-        return "digite uma classificacao valida (ex: x anos.. livre)";
+        return "Digite uma classificação válida (ex: 12 anos, livre).";
     }
 
     @Override

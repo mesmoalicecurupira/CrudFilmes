@@ -9,7 +9,7 @@ public class DialogUtil {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erro");
         alert.setHeaderText(null);
-        alert.setContentText(mensagem); // Adicionado aqui
+        alert.setContentText(mensagem);
         alert.showAndWait();
     }
 
@@ -25,7 +25,7 @@ public class DialogUtil {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Alerta");
         alert.setHeaderText(null);
-        alert.setContentText(mensagem); // Adicionado aqui (resolve o pop-up em branco)
+        alert.setContentText(mensagem);
         alert.showAndWait();
     }
 

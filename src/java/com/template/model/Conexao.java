@@ -4,22 +4,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Conexao
-{
-    //conexao com o banco
-    static String conexao = "jdbc:postgresql://localhost:5432/filmes";
-    static String usuario = "postgres";
-    static String senha = "postgres";
+public class Conexao {
 
-    public Connection conectaBD()//conexão com o banco de dados
-    {
-        try
-        {
-            return DriverManager.getConnection(conexao, usuario, senha);
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e.getMessage()); //se falhar, lança um erro explicando o motivo
+    private static final String CONEXAO = "jdbc:postgresql://localhost:5432/filmes";
+    private static final String USUARIO = "postgres";
+    private static final String SENHA = "postgres";
+
+    public Connection conectaBD() {
+        try {
+            return DriverManager.getConnection(CONEXAO, USUARIO, SENHA);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar com o banco de dados: " + e.getMessage(), e);
         }
     }
 }

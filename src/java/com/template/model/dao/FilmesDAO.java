@@ -3,119 +3,101 @@ package com.template.model.dao;
 import com.template.model.Conexao;
 import com.template.model.dto.FilmesDTO;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.template.util.DialogUtil.showError;
+public class FilmesDAO implements IFilmesDAO {
 
-public class FilmesDAO {
+    private static final Logger LOGGER = Logger.getLogger(FilmesDAO.class.getName());
+    private final Conexao conexao;
 
-    String sql = "INSERT INTO filmes (nome_filme, categoria_filme, classifica_indicativa, atores_filme) VALUES (?, ?, ?, ?)";
+    public FilmesDAO() {
+        this(new Conexao());
+    }
 
-    private static final Logger logger = Logger.getLogger(FilmesDAO.class.getName());
+    public FilmesDAO(Conexao conexao) {
+        this.conexao = conexao;
+    }
 
-    public void cadastrarFilmes(FilmesDTO filmes){
+    @Override
+    public void cadastrarFilmes(FilmesDTO filmes) {
+        String sql = "INSERT INTO filmes (nome_filme, categoria_filme, classifica_indicativa, atores_filme) VALUES (?, ?, ?, ?)";
 
-            try(Connection conexao = new Conexao().conectaBD(); PreparedStatement smt = conexao.prepareStatement(sql))
-            {
-                smt.setString(1,filmes.getNome());//substitui as ? pelos dados reais do dto
-                smt.setString(2,filmes.getCategoria());
-                smt.setString(3,filmes.getClassificacao());
-                smt.setString(4,filmes.getAtores());
-
-                smt.execute();
-                smt.close();
-
-            }
-            catch(SQLException e)
-            {
-                logger.log(Level.SEVERE,"erro", e);
-                showError( "Error ao cadastrar");
-            }
-        }
-        public void deletarFilmes(FilmesDTO filmes)
-        {
-            String sqlDelete = "DELETE from filmes where id_filmes = ?";
-
-            try(Connection conexao = new Conexao().conectaBD(); PreparedStatement smt = conexao.prepareStatement(sqlDelete))
-            {
-                smt.setInt(1, filmes.getId());//define qual id sera excluido
-
-                int removidos = smt.executeUpdate();
-                if (removidos == 0)
-                {
-                    logger.log(Level.SEVERE,"nada pra ser removidos");
-                }
-
-            }
-            catch(SQLException e )
-            {
-                logger.log(Level.SEVERE,"erro", e);
-                showError( "Error ao deletar");
-
-
-            }
-        }
-        public void atualizarFilmes(FilmesDTO filmes)
-        {
-            String sqlAtualizar = ("UPDATE filmes SET nome_filme = ?, categoria_filme = ?,classifica_indicativa = ?,atores_filme = ? WHERE id_filmes = ?");
-
-            try(Connection conexao = new Conexao().conectaBD(); PreparedStatement smt = conexao.prepareStatement(sqlAtualizar))
-            {
-                smt.setString(1, filmes.getNome());
-                smt.setString(2, filmes.getCategoria());
-                smt.setString(3, filmes.getClassificacao());
-                smt.setString(4, filmes.getAtores());
-                smt.setInt(5, filmes.getId());
-
-                int linhas = smt.executeUpdate();
-
-                if (linhas > 0)
-                {
-                    logger.log(Level.SEVERE,"Sem linha");
-                }
-
-            }
-            catch (SQLException e)
-            {
-                logger.log(Level.SEVERE,"erro", e);
-                showError( "Error ao atualizar");
-
-
-            }
-        }
-
-        public ArrayList<FilmesDTO> lerFilmes()
-        {
-            String sqlLer = "Select * from filmes";
-            ArrayList<FilmesDTO> listaDeFilmes = new ArrayList<>();
-
-            try(Connection conexao = new Conexao().conectaBD(); PreparedStatement smt = conexao.prepareStatement(sqlLer))
-            {
-                ResultSet rs = smt.executeQuery();
-
-                while(rs.next())
-                {
-                    FilmesDTO filmes = new FilmesDTO();
-
-                    // Ajustado para os nomes reais das colunas da sua tabela do banco
-                    filmes.setId(rs.getInt("id_filmes"));
-                    filmes.setNome(rs.getString("nome_filme"));
-                    filmes.setCategoria(rs.getString("categoria_filme"));
-                    filmes.setClassificacao(rs.getString("classifica_indicativa"));
-                    filmes.setAtores(rs.getString("atores_filme"));
-
-                    listaDeFilmes.add(filmes);
-                }
-            } catch(SQLException e) {
-                logger.log(Level.SEVERE,"erro ao ler filmes", e);
-                showError( "Error ao ler");
-
-            }
-
-            return listaDeFilmes;
+        try (Connection conn = conexao.conectaBD(); PreparedStatement smt = conn.prepareStatement(sql)) {
+            smt.setString(1, filmes.getNome());
+            smt.setString(2, filmes.getCategoria());
+            smt.setString(3, filmes.getClassificacao());
+            smt.setString(4, filmes.getAtores());
+            smt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao cadastrar filme", e);
+            throw new RuntimeException("Erro ao cadastrar filme no banco de dados", e);
         }
     }
 
+    @Override
+    public void deletarFilmes(int id) {
+        String sqlDelete = "DELETE FROM filmes WHERE id_filmes = ?";
+
+        try (Connection conn = conexao.conectaBD(); PreparedStatement smt = conn.prepareStatement(sqlDelete)) {
+            smt.setInt(1, id);
+            smt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao deletar filme", e);
+            throw new RuntimeException("Erro ao deletar filme no banco de dados", e);
+        }
+    }
+
+    public void deletarFilmes(FilmesDTO filmes) {
+        if (filmes != null) {
+            deletarFilmes(filmes.getId());
+        }
+    }
+
+    @Override
+    public void atualizarFilmes(FilmesDTO filmes) {
+        String sqlAtualizar = "UPDATE filmes SET nome_filme = ?, categoria_filme = ?, classifica_indicativa = ?, atores_filme = ? WHERE id_filmes = ?";
+
+        try (Connection conn = conexao.conectaBD(); PreparedStatement smt = conn.prepareStatement(sqlAtualizar)) {
+            smt.setString(1, filmes.getNome());
+            smt.setString(2, filmes.getCategoria());
+            smt.setString(3, filmes.getClassificacao());
+            smt.setString(4, filmes.getAtores());
+            smt.setInt(5, filmes.getId());
+            smt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao atualizar filme", e);
+            throw new RuntimeException("Erro ao atualizar filme no banco de dados", e);
+        }
+    }
+
+    @Override
+    public List<FilmesDTO> lerFilmes() {
+        String sqlLer = "SELECT * FROM filmes";
+        List<FilmesDTO> listaDeFilmes = new ArrayList<>();
+
+        try (Connection conn = conexao.conectaBD(); PreparedStatement smt = conn.prepareStatement(sqlLer)) {
+            ResultSet rs = smt.executeQuery();
+            while (rs.next()) {
+                FilmesDTO filmes = new FilmesDTO();
+                filmes.setId(rs.getInt("id_filmes"));
+                filmes.setNome(rs.getString("nome_filme"));
+                filmes.setCategoria(rs.getString("categoria_filme"));
+                filmes.setClassificacao(rs.getString("classifica_indicativa"));
+                filmes.setAtores(rs.getString("atores_filme"));
+                listaDeFilmes.add(filmes);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao ler filmes", e);
+            throw new RuntimeException("Erro ao ler filmes do banco de dados", e);
+        }
+
+        return listaDeFilmes;
+    }
+}

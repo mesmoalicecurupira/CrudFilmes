@@ -1,19 +1,30 @@
 package com.template.service;
 
 import com.template.model.dao.FilmesDAO;
+import com.template.model.dao.IFilmesDAO;
 import com.template.model.dto.FilmesDTO;
 import com.template.validator.FilmesValidator;
+import com.template.validator.IFilmesValidator;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class FilmesService {
+public class FilmesService implements IFilmesService {
 
-    private final FilmesDAO filmesDAO = new FilmesDAO();
+    private final IFilmesDAO filmesDAO;
+    private final IFilmesValidator filmesValidator;
 
+    public FilmesService() {
+        this(new FilmesDAO(), new FilmesValidator());
+    }
+
+    public FilmesService(IFilmesDAO filmesDAO, IFilmesValidator filmesValidator) {
+        this.filmesDAO = filmesDAO;
+        this.filmesValidator = filmesValidator;
+    }
+
+    @Override
     public boolean salvarFilme(String nome, String categoria, String classificacao, String atores) {
-        if (!FilmesValidator.validarFilme(nome, categoria, classificacao, atores)) {
-            return false;
-        }
+        filmesValidator.validarFilme(nome, categoria, classificacao, atores);
 
         FilmesDTO dto = new FilmesDTO();
         dto.setNome(nome);
@@ -25,10 +36,9 @@ public class FilmesService {
         return true;
     }
 
+    @Override
     public boolean atualizarFilme(int id, String nome, String categoria, String classificacao, String atores) {
-        if (!FilmesValidator.validarFilme(nome, categoria, classificacao, atores)) {
-            return false;
-        }
+        filmesValidator.validarFilme(nome, categoria, classificacao, atores);
 
         FilmesDTO dto = new FilmesDTO();
         dto.setId(id);
@@ -41,13 +51,13 @@ public class FilmesService {
         return true;
     }
 
+    @Override
     public void excluirFilme(int id) {
-        FilmesDTO dto = new FilmesDTO();
-        dto.setId(id);
-        filmesDAO.deletarFilmes(dto);
+        filmesDAO.deletarFilmes(id);
     }
 
-    public ArrayList<FilmesDTO> listarFilmes() {
+    @Override
+    public List<FilmesDTO> listarFilmes() {
         return filmesDAO.lerFilmes();
     }
 }

@@ -5,21 +5,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application
-{
-    @Override
-    public void start(Stage stage) throws Exception
-    {
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/main.fxml"));
-        Scene scene = new Scene(loader.load(),700,500);
+import java.net.URL;
 
-        stage.setTitle("Hello");
+public class Main extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        URL fxmlLocation = getClass().getResource("/com/template/main.fxml");
+        if (fxmlLocation == null) {
+            fxmlLocation = getClass().getResource("/main.fxml");
+        }
+
+        FXMLLoader loader = new FXMLLoader(fxmlLocation);
+        Scene scene = new Scene(loader.load(), 700, 500);
+
+        stage.setTitle("CRUD Filmes");
         stage.setScene(scene);
         stage.show();
     }
 
-    public static void main(String[] args)
-    {
-        launch();
+    public static void main(String[] args) {
+        launch(args);
     }
 }
