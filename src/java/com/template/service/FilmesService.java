@@ -13,10 +13,6 @@ public class FilmesService implements IFilmesService {
     private final IFilmesDAO filmesDAO;
     private final IFilmesValidator filmesValidator;
 
-    public FilmesService() {
-        this(new FilmesDAO(), new FilmesValidator());
-    }
-
     public FilmesService(IFilmesDAO filmesDAO, IFilmesValidator filmesValidator) {
         this.filmesDAO = filmesDAO;
         this.filmesValidator = filmesValidator;

@@ -39,10 +39,6 @@ public class MainController {
 
     private final IFilmesService filmesService;
 
-    public MainController() {
-        this(new FilmesService());
-    }
-
     public MainController(IFilmesService filmesService) {
         this.filmesService = filmesService;
     }
