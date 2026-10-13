@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/Filmes")
+@RequestMapping({"/filme", "/filmes", "/Filmes"})
 @RequiredArgsConstructor
 public class FilmesController {
 

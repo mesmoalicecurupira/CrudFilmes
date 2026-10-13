@@ -2,7 +2,6 @@ package com.CrudFilmes.Filmes.business;
 
 import com.CrudFilmes.Filmes.infrastructure.entitys.Filmes;
 import com.CrudFilmes.Filmes.infrastructure.repository.FilmesRepository;
-import jakarta.persistence.Id;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,22 +16,24 @@ public class FilmeService {
         repository.saveAndFlush(filmes);
     }
 
-    public Filmes buscarFilmesPorNome(String Nome){
-        return repository.findByNome(Nome).orElseThrow(
-                () -> new RuntimeException("Nome nao encontrado")
+    public Filmes buscarFilmesPorNome(String nome){
+        return repository.findByNome(nome).orElseThrow(
+                () -> new RuntimeException("Filme não encontrado")
         );
     }
-    public void deletarFilmesPorNome (String Nome){
-        repository.deleteByNome(Nome);
+    public void deletarFilmesPorNome(String nome){
+        repository.deleteByNome(nome);
     }
     public void atualizarFilmePorId(Integer id, Filmes filmes)
     {
         Filmes filmesEntity = repository.findById(id).orElseThrow(() ->
-                new RuntimeException("Usuario nao encontrado"));
+                new RuntimeException("Filme não encontrado"));
         Filmes filmesAtualizado = Filmes.builder()
-                .nome(filmes.getNome() != null ? filmes.getNome() :
-                        filmesEntity.getNome())
-                .id(filmes.getId())
+                .id(id)
+                .nome(filmes.getNome() != null ? filmes.getNome() : filmesEntity.getNome())
+                .ator(filmes.getAtor() != null ? filmes.getAtor() : filmesEntity.getAtor())
+                .classificacao(filmes.getClassificacao() != null ? filmes.getClassificacao() : filmesEntity.getClassificacao())
+                .categoria(filmes.getCategoria() != null ? filmes.getCategoria() : filmesEntity.getCategoria())
                 .build();
         repository.saveAndFlush(filmesAtualizado);
     }
