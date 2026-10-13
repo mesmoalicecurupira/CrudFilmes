@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="JavaFx 25 Run" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.template.main.Main" />
-    <module name="CRUDFilmes" />
+    <module name="Filmes" />
     <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/Documents/javafx-sdk-25.0-2.3/lib --add-modules javafx.controls,javafx.fxml" />
     <method v="2">
       <option name="Make" enabled="true" />
