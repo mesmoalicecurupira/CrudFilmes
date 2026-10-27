@@ -1,10 +1,26 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+### IntelliJ IDEA ###
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.kotlin
+
+### Eclipse ###
+=======
+>>>>>>> CrudFilmes
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
 ### STS ###
+<<<<<<< HEAD
+=======
+>>>>>>> 4a96639 (feat: implementacao)
+>>>>>>> CrudFilmes
 .apt_generated
 .classpath
 .factorypath
@@ -12,15 +28,24 @@ target/
 .settings
 .springBeans
 .sts4-cache
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+=======
+>>>>>>> CrudFilmes
 
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+<<<<<<< HEAD
+=======
+>>>>>>> 4a96639 (feat: implementacao)
+>>>>>>> CrudFilmes
 
 ### NetBeans ###
 /nbproject/private/
@@ -28,12 +53,24 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 
 ### VS Code ###
 .vscode/
 
 ### Mac OS ###
 .DS_Store
+=======
+>>>>>>> CrudFilmes
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+<<<<<<< HEAD
+=======
+>>>>>>> 4a96639 (feat: implementacao)
+>>>>>>> CrudFilmes
